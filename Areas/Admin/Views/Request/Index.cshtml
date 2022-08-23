@@ -1,0 +1,85 @@
+﻿@model IEnumerable<OnlineHelpDesk.Models.Request>
+
+@{
+    ViewData["Title"] = "Request List";
+    String spacebar = "To";
+}
+
+<h1>Request List</h1>
+
+<div style="margin: 14px">
+    <form asp-action="Index">
+        @if (ViewBag.startDate == "" && ViewBag.endDate == "")
+        {
+            <input type="datetime-local" name="startDate" />
+            @spacebar;
+            <input type="datetime-local" name="endDate" />
+        }
+        else
+        {
+            <input type="datetime-local" name="startDate" value="@ViewBag.startDate" />
+            @spacebar;
+            <input type="datetime-local" name="endDate" value="@ViewBag.endDate" />
+        }
+        &nbsp;
+        <input type="submit" value="Filter" name="_button" class="btn btn-outline-primary" />
+        &nbsp;
+        <input type="submit" value="Reset" name="_button" class="btn btn-outline-primary" />
+    </form>
+</div>
+
+<table class="table" style="text-align: center;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remark)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @foreach (var _item in ViewBag.facilities)
+                    {
+                        if (item.FacilityId == _item.FacilityId)
+                        {
+                            <p>@_item.FacilityName</p>
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestTime)
+                </td>
+                <td>
+                    @if (item.Status == "Request" || item.Status == "Report")
+                    {
+                        <p class="text-danger">Waiting for approval</p>
+                    }
+                    else
+                    {
+                        <p class="text-primary">@item.Status</p>
+                    }
+                </td>
+
+                <td>
+                    @Html.Raw(item.Remark)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

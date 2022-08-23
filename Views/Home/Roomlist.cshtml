@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Room List";
+
+}
+
+
+
+<link rel="stylesheet" href="~/template/css/style.css">
+<!-- Responsive-->
+
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="~/template/css/jquery.mCustomScrollbar.min.css">
+<!-- Tweaks for older IEs-->
+
+
+<h1 style="text-align:center">Room List</h1>
+
+<div class="row" style="margin-bottom:2%">
+
+    @foreach (var item in ViewBag.ds)
+    {
+       
+    <div class="col-sm-3 why">
+        <a href="/Home/RoomProfile?id=@item.FacilityId">
+
+            <div id="box_ho" class="why-box">
+                <i>
+                    @if (item.Image != null)
+                    {
+
+                        <img src="~/@Url.Content(item.Image)" width="200px" />
+
+                    }
+                    else
+                    {
+                        <img src="~/image/ImageSystem/roomdefualt.png" />
+
+                    }
+
+
+                </i>
+                <h3>@item.FacilityName</h3>
+                <p style="text-align:justify">@item.Description </p>
+                <br />
+
+                <a asp-action="Create" asp-controller="Report" asp-route-id="@item.FacilityId" id="card">Send Report </a>
+
+                @if (item.RentalStatus == true)
+                {
+                      <a asp-action="Create" asp-controller="Request" asp-route-id="@item.FacilityId" id="card" style="color: #1dc5bb">Rental Room </a>
+                }
+
+            </div>
+        </a>
+    </div>
+    }
+
+
+
+</div>
+
+
+<style>
+    #card {
+        box-shadow: 0px 0px 7px #c2c3ca;
+        padding: 2.5%;
+        border-radius: 20px;
+        color: #1dc51d
+    }
+
+
+
+</style>
+

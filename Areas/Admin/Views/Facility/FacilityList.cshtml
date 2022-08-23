@@ -1,0 +1,117 @@
+﻿@model IEnumerable<OnlineHelpDesk.Areas.Admin.Models.Facility>
+
+@{
+    ViewData["Title"] = "Facility List";
+}
+
+<h1>FacilityList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div style="margin: 14px">
+    <form asp-action="FacilityList" method="get" >
+        <select name="data" onchange="Search()">
+            @if (ViewBag.data == "")
+            {
+                <option value="">All</option>
+                @foreach (var item in TempData["facilities"] as List<String>)
+                {
+                    <option value="@item">@item</option>
+                }
+            }
+            else
+            {
+                <option value="">All</option>
+                @foreach (var item in TempData["facilities"] as List<String>)
+                {
+                    if (ViewBag.data == item)
+                    {
+                        <option value="@item" selected>@item</option>
+                    }
+                    else
+                    {
+                        <option value="@item">@item</option>
+                    }
+
+                }
+            }
+
+        </select>
+        <input type="submit" id="_submit" hidden="hidden"/>
+    </form>
+</div>
+
+<script>
+    function Search() {
+        document.getElementById('_submit').click() == true;
+    }
+</script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityCategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+           
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityName)
+            </td>
+            <td>
+
+                @foreach (var item11 in ViewBag.facategory)
+                {
+                    if (item.FacilityCategoryId.Equals(item11.FacilityCategoryId) ==true)
+                    {
+                <span>@item11.CategoryName</span>
+                    }
+                }
+
+
+        
+            </td>
+            <td>
+                <img src="~/@Url.Content(item.Image)" width="120" />
+            </td>
+            <td>
+                @if (item.Status == 0)
+                {
+
+
+
+                    <span class="text-danger">Not Active</span>
+                }
+                else
+                {
+                    <span class="text-success">Active</span>
+
+                }
+            </td>
+         
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FacilityId">Edit</a> |
+                @*<a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.FacilityId">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
